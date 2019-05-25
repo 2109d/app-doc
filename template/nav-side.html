@@ -1,0 +1,15 @@
+<div class="navbar-dark position-absolute">
+  <ul class="navbar-nav">
+  <!-- ko foreach:vo.list -->
+  <li class="nav-item mt-3 mb-1">
+    <div data-bind="text:$data.title" class="text-warning">메뉴 그룹명</div>
+  </li>
+    <!-- ko foreach:{data:$data.links, as:'link'} -->
+    <li class="nav-item mb-2">
+      <a data-bind="text:link.title, attr:link.attr, css:link.css"
+      class="nav-link ml-3 p-0" href="#">메뉴 제목</a>
+    </li>
+    <!-- /ko -->
+  <!-- /ko -->
+  </ul>
+</div>

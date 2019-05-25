@@ -1,0 +1,235 @@
+<div class="row" data-app-motion>
+  <div class="col-12"><h2 class="h4">기본기능</h2></div>
+
+  <div class="col-12">app 인스턴스가 제공하는 기본기능에 대한 설명 및 사용법</div>
+
+  <!-- 모드 설정 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">모드설정<b class="badge text-primary">debug( hostname:string[array] )</b></div>
+    명시된 호스트명에서 실행되는 어플리케이션에 콘솔로그를 출력 할 수 있도록 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.debug('localhost');
+app.debug(['localhost', '127.0.0.1']);
+</pre>
+    </div>
+  </div>
+
+  <!-- 로그 출력 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">로그 출력<b class="badge text-primary">trace:object</b></div>
+    로그를 출력 하며, 오류에 대한 스택로그를 추적할 수 있도록 한다.
+    <div><b class="badge mt-3">메소드</b></div>
+    <ul class="list-group">
+      <li class="list-group-item p-2">
+        <b class="badge">log(..., [option:object]):</b> 콘솔로그를 출력한다.
+        옵션값으로 로그의 헤더 및 색상 변경이 가능하다.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">error(...)</b> 오류를 출력하며, 메모리 스텍을 기록한다. 파라메터 입력이 없이
+        호출할 경우 기존에 저장 되어 있는 로그를 반환한다.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">stack(logs:string)</b> error()로 반환받은 로그값을 콘솔에 출력한다.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">clear()</b> 저장된 로그를 삭제한다.
+      </li>
+    </ul>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.trace.log(1, 'a', {}, []);
+// 헤더 출력
+app.trace.log(1, 'a', {}, [], {option:'sample log', color:'#f00'});
+// 에러로그 출력
+app.trace.error('error');
+app.trace.stack(app.trace.error());
+// 로그기록 삭제
+app.trace.clear();
+</pre>
+    </div>
+        
+  </div>
+
+  <!-- 모듈 추가 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">모듈 추가<b class="badge text-primary">require( path: string[array] )</b></div>
+    모듈화된 스크립트를 추가하여 사용할 수 있도록 한다. require를 통한 모듈은 비동기적으로 추가 되며,
+    require를 통해 로드된 자원 안에서 require를 사용할 수 없다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.require('v1.js');
+app.require(['v1.js', 'v2.js']);
+
+// v1.js
+// requre로 로드된 스크립트안에서 require 사용불가
+<strike>app.require('v2.js');</strike>
+</pre>
+    </div>
+  </div>
+
+  <!-- onload 이벤트 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">로드 이벤트<b class="badge text-primary">onload( procedure:function )</b></div>
+    app의 로드가 완료 되는 시점에 발생하는 이벤트로 app 객체가 생성되면서 수행하는
+    작업(모듈로드, 컨트롤러로드 ...) 완료 후 수행할 작업을 처리 할수 있도록 한다. 
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.onload(function() {
+  alert('app load after');
+});
+</pre>
+    </div>
+  </div>
+
+  <!-- router -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">라우터<b class="badge text-primary">router(event:Event)</b></div>
+    브라우저의 히스토리 변경시 호출된다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.router(function(ev) {
+  app.trace.log(ev);
+});
+</pre>
+    </div>
+  </div>
+
+  <!-- 기능추가 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">기능추가<b class="badge text-primary">add( name:string, procedure:function )</b></div>
+    기본 기능외에 확장된 기능을 추가 할수 있도록 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.add('goHome', function() {
+  location.href = '/';
+});
+
+app.goHome();
+</pre>
+    </div>
+  </div>
+
+  <!-- 디렉티브 작성 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">디렉티브 등록<b class="badge text-primary">directive( name:string, procedure:function )</b></div>
+    컨트롤러에 의해 화면 바인딩시 별도의 작업을 수행 할수 있도록 한다.
+    <div class="alert alert-secondary mt-3">
+      <pre data-bind="htmlcode"><button data-bind="focus">button</button></pre>
+      <pre data-bind="jscode">app.directive('focus', function() {});</pre>
+    </div>
+  </div>
+  
+  <!-- 컨트롤러 반환 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">컨트롤러 반환<b class="badge text-primary">controller( name:string ) :controller</b></div>
+    등록된 컨트롤러 객체를 반환 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+// 컨트롤러 취득
+var mainView = app.controller('mainView');
+// 화면실행
+mainView.open();
+</pre>
+    </div>
+  </div>
+
+  <!-- 뷰 작성 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">뷰 컨트롤러 작성<b class="badge text-primary">view( name:string, procedure:function )</b></div>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.view('name', function(ctrl, param) {});
+</pre>
+    </div>
+  </div>
+
+  <!-- 팝업 작성 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">팝업 컨트롤러 작성<b class="badge text-primary">popup( name:string, procedure:function )</b></div>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.popup('name', function(ctrl, param) {});
+</pre>
+    </div>
+  </div>
+
+  <!-- 콤포넌트 작성 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">콤포넌트 컨트롤러 작성<b class="badge text-primary">component( name:string, procedure:function )</b></div>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+app.component('name', function(ctrl) {});
+</pre>
+    </div>
+  </div>
+
+  <!-- resource 추가 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">리소스 삽입<b class="badge text-primary">insertResource( [selector:string[object], [position:string]] ) :object</b></div>
+    리소스에 레이아웃을 추가 한다. 파라메터 없이 사용하면 리소스의 마지막에 레이아웃 추가하며,
+    삽입 대상을 지정할 경우 첫번째 파라메터로 추가할 기준이 되는 셀렉터 또는 DOM객체를 넘기며,
+    두번째 파라메터에 첫번째 대상의 앞에('before') 또는 뒤에('after') 삽입 위치값을 입력 한다.
+    기본값은 뒤에('after') 위치하도록 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+<div data-app-resource>
+  <!-- 1. 에서 생성 -->
+  <div id="before"></div>
+  <!-- 2. 에서 생성 -->
+  <div></div>
+  <div id="layer"></div>
+  <!-- 3. 에서 생성 -->
+  <div></div>
+</div>
+</pre>
+<pre data-bind="jscode">
+// 1. #layer 앞에 추가
+var before = app.insertResource('#layer', 'before');
+before.setAttribute('id', 'before');
+// 2. #before 뒤에 추가
+app.insertResource(before, 'after');
+// 3. 리소스 마지막에 추가
+app.insertResource();
+</pre>
+    </div>
+  </div>
+
+  <!-- resource -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">리소스<b class="badge text-primary">getResource( [selector:string[object]] ) :object</b></div>
+    리소스 객체를 받아 올때 사용 한다. 파라메터 없이 사용하면 리소스의 DOM객체를 반환.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+<div data-app-resource>
+  <div id="layer"></div>
+</div>
+</pre>
+<pre data-bind="jscode">
+// [data-app-resource] 객체
+var rsc = app.getResource();
+// #layer 객체
+var layer = app.getResource('#layer');
+</pre>
+    </div>
+  </div>
+
+  <!-- resource 삭제 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">리소스 삭제<b class="badge text-primary">removeResource(selector:string[object])</b></div>
+    리소스에서 대상 객체를 삭제 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+<div data-app-resource>
+  <div id="layer"></div>
+</div>
+</pre>
+<pre data-bind="jscode">
+app.removeResource('#layer');
+</pre>
+    </div>
+  </div>
+
+  </div>
+
+</div>

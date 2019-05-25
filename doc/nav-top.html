@@ -1,0 +1,20 @@
+<a data-bind="attr:{href:vo.home}" class="navbar-brand mr-auto mr-lg-0" href="#">MakeApp 가이드</a>
+<button data-bind="event:on.menu, waypoint" class="navbar-toggler p-0 border-0" type="button">
+  <span class="navbar-toggler-icon"></span>
+</button>
+
+<div data-bind="css:{open:vo.menu}" class="navbar-collapse">
+  <ul class="navbar-nav mr-auto">
+    <!-- ko foreach:vo.list -->
+    <li class="nav-item mt-3 mb-1">
+      <div data-bind="text:$data.title" class="text-warning">메뉴 그룹명</div>
+    </li>
+      <!-- ko foreach:{data:$data.links, as:'link'} -->
+      <li class="nav-item mb-2">
+        <a data-bind="text:link.title, attr:link.attr, css:link.css"
+        class="nav-link ml-3 p-0" href="#">메뉴 제목</a>
+      </li>
+      <!-- /ko -->
+    <!-- /ko -->
+  </ul>
+</div>

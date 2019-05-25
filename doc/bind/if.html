@@ -1,0 +1,103 @@
+<div class="row" data-app-motion>
+  <div class="col-12"><h2 class="h4">조건 / 반복</h2></div>
+
+  <!-- 숨김 처리 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">숨김 처리<b class="badge text-primary">visible</b></div>
+    엘리먼트의 숨김 처리 할지를 결정한다. 화면과 연결되는 변수는 boolean값을 사용하며,
+    조건에 충족되면 화면에 표시 하고, 충족되지 않으면 화면에 숨김 처리 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+<input type="checkbox" data-bind="checked:vo.isText">텍스트 입력
+<!-- ctrl.vo.isCheck = ctrl.observer(true); -->
+<input type="text" data-bind="visible:vo.isText">
+</pre>
+    </div>
+  </div>
+
+  <!-- 랜더링 처리 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">랜더링 처리<b class="badge text-primary">if, ifnot</b></div>
+    <p>엘리먼트를 화면에 랜더링 할지 여부를 결정한다. 사용방법은 visible과 같으며,
+    차이점은 visible은 화면 랜더링 후 디스플레이 처리 여부를 결정하지만, if, ifnot의 경우
+    조건에 만족하지 않으면 화면에 마크업 랜더링 하지 않는다.
+    if는 조건에 충족하면 해당 영역을 랜더링 하며, ifnot은 조건에 충족하지 않은 경우 랜더링 한다.</p>
+    <p>엘리먼트의 특정 컨테이너 없이 조건문을 처리 하고 싶은 경우 주석(&lt;!-- --&gt;)의 미리 정의된 디렉티브를 사용하여
+    조건부 랜더링을 처리 할수 있다. 주석을 활용하는 경우 <b class="badge">&lt;!-- ko if:xxx --&gt;</b>(시작)
+    <b class="badge">&lt;!-- /ko --&gt;</b>(종료)사이에 내용을 조건부로 랜더링 한다.</p>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+  <input type="radio" value="1" data-bind="checked:vo.choice">선택
+  <input type="radio" value="2" data-bind="checked:vo.choice">입력
+
+  <select>
+    <option value="1">1. xxx</option>
+    <!-- ko if:vo.chois.$data == '1' -->
+    <option value="2">2. xxx</option>
+    <!-- /ko -->
+  </select>
+  <input type="text" data-bind="if:vo.chois.$data == '2'">
+</pre>
+    </div>
+  </div>
+
+  <!-- 반복 처리 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">반복 처리<b class="badge text-primary">foreach</b></div>
+    <p>데이터의 반복되는 내용을 처리 할때 사용한다. 반복구 내부에서 <b class="badge">$index</b>를 통해
+    반복되는 레코드의 순번을 제공하며, <b class="badge">$data</b>를 이용하여 레코드에 접근 할수 있다.</p>
+    <p>엘리먼트의 특정 컨테이너 없이 반복을 처리 하고 싶은 경우 주석(&lt;!-- --&gt;)의
+    미리 정의된 디렉티브를 사용하여 반복된 랜더링을 처리 할수 있다.
+    주석을 활용하는 경우 <b class="badge">&lt;!-- ko foreach:xxx --&gt;</b>(시작)
+    <b class="badge">&lt;!-- /ko --&gt;</b>(종료)사이에 내용을 조건부로 랜더링 한다.</p>
+    <p>디렉티브 선언시 변수의 별칭을 사용할 수 있으며 $data를 사용할 수 없는
+    경우(이중 루프 안에서의 사용) 별칭을 선언하여 사용한다.
+    <b class="badge">as:</b>사용할 별칭, <b class="badge">data:</b>바인딩된 변수값</p>
+    <p>화면의 변화를 감지 가능한 형태로 바인딩된 객체의 선언이 배열인 경우
+    배열에서 제공하는 메소드와 동일한 형식으로 사용가능하다.(push, pop ...)</p>
+    <ul class="list-group mt-3">
+      <li class="list-group-item p-2">
+        <b class="badge">$data:</b>반복구 내부에서 사용할 때는 반복되는 레코드의 값.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">$index:</b>반복구 내부에서 사용되며, 반복되는 레코드의 인덱스 값.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">$parent:</b>반복구 내부에서 사용되며, 반복구를 소유하고 있는 부모 객체.
+      </li>
+    </ul>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+<div data-bind="foreach:{as:'list', data:vo.list}">
+  <span>셀렉트</span> 생성
+  <select>
+    <option>전체</option>
+    <!-- ko foreach:$data.select -->
+    <option data-bind="text:list.text +':'+ $data.text, attr:{value:$data.value}">셀렉트: 옵션값</option>
+    <!-- /ko -->
+  </select>
+</div>
+</pre>
+<pre data-bind="jscode">
+// 리스트값 선언
+ctrl.vo.list = ctrl.observer([{
+  text:'셀렉트 1번',
+  select:[
+    {text:'옵션 1번', value:'1'},
+    {text:'옵션 2번', value:'2'}
+  ]
+}]);
+
+// 추가
+ctrl.vo.list.push({
+  text:'셀렉트 2번',
+  select:[
+    {text:'옵션 1번', value:'1'},
+    {text:'옵션 2번', value:'2'}
+  ]
+});
+</pre>
+    </div>
+  </div>
+
+</div>

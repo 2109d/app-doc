@@ -1,0 +1,36 @@
+---
+title: Makeup Guide
+---
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{ layout.title }}| {{ page.title }}</title>
+
+  <link rel="stylesheet" href="{{ "/libs/bootstrap.min.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ "/libs/open-iconic-bootstrap.min.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ "/libs/app-style.css" | relative_url }}">
+
+  <script src="{{ "/libs/app-makeup.js" | relative_url }}"></script>
+  <script src="{{ "/libs/app-framework.js" | relative_url }}"></script>
+  <script src="{{ "/libs/app-utils.js" | relative_url }}"></script>
+  <script src="{{ "/libs/app-gnb.js" | relative_url }}"></script>
+  <script>!function(app) { app.root = "{{ '' | relative_url }}"; }(MakeApp());</script>
+  
+</head>
+<body class="bg-light">
+  <nav data-app-view="nav-top" class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+    <span class="navbar-brand mr-auto mr-lg-0 text-dark">타이틀</span>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav data-app-view="nav-side" class="col-md-2 d-none d-md-block bg-dark sidebar"></nav>
+      <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 p-3 position-relative">{{ content }}</main>
+    </div>
+  </div>
+</body>
+</html>

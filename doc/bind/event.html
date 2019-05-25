@@ -1,0 +1,69 @@
+<div class="row" data-app-motion>
+  <div class="col-12"><h2 class="h4">이벤트 / 디렉티브</h2></div>
+
+  <div class="col-12">
+  각 이벤트의 처리에 대한 처리 및 액선에 대한 처리는 컨트롤러의 on속성이 관리 하며,
+  컨트롤러의 이벤트 핸들러를 관리 하는 객체를 받아 이벤트 리스너를 등록 한다.
+  </div>
+
+  <!-- 이벤트 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">이벤트<b class="badge text-primary">event</b></div>
+    화면상에서는 event디렉티브를 사용하며 컨트롤러의 on에 등록된 이벤트 핸들러를 통해 전달 된다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode">
+<button data-bind="event:on.button">click event</button>
+<input type="text" data-bind="event:on.input">
+</pre>
+<pre data-bind="jscode">
+// 이벤트 핸들러를 받아 이벤트 리스너 등록
+ctrl.on.button = ctrl.handler();
+ctrl.on.button.event('click', function(evt) {
+  alert('click event');
+});
+
+// 이벤트 체이닝으로 이벤트 리스너 등록
+ctrl.on.input = ctrl.handler().event('focus', function(evt) {
+  alert('focus event');
+}).event('blur', function() {
+  alert('blur event');
+});
+</pre>
+    </div>
+  </div>
+
+  <!-- 디렉티브 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">디렉티브<b class="badge text-primary">directive( name:string, procedure:function )</b></div>
+    컨트롤러에 의해 화면 바인딩시 미리정의된 디렉티브외에 사용자가 정의한 별도의 작업을 수행 할수 있도록 한다.
+    화면 랜더링시 디렉티브에 대한 정보를 리스너로 등록된 함수에 매개변수로 전달된다.
+    <ul class="list-group mt-3">
+      <li class="list-group-item p-2">
+        <b class="badge">ctlr:</b>디렉티브를 소유한 컨트롤러 객체.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">el:</b>디렉티브가 선언된 element 객체.
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">param:</b>디렉티브로 전달된 값
+      </li>
+    </ul>
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="htmlcode:vo.color">
+<button data-bind="focus:'button'">button</button>
+<!-- target 으로 포커스 이동처리 -->
+<button data-bind="focus:'target'">button</button>
+</pre>
+<pre data-bind="jscode:vo.color">
+app.directive('focus', function(ctrl, el, param) {
+  // focus 디렉티브에 전달된 확인
+  ctrl.log('focus param:', param);
+  // 화면 시작시 특정값으로 포커스 이동
+  if(param == 'target') {
+    el.focus();
+  }
+});
+</pre>
+    </div>
+  </div>
+</div>

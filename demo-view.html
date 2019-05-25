@@ -1,0 +1,31 @@
+---
+layout: default
+title: "뷰 데모"
+---
+
+<div class="row">
+  <div class="col-12 mb-3">
+    <div class="alert alert-secondary p-2 pl-3"><strong>step1: 조회</strong></div>
+    <div data-app-view="vi-step1"></div>
+  </div>
+
+  <div class="col-12 mb-3">
+    <div class="alert alert-secondary p-2 pl-3"><strong>step2: 입력</strong></div>
+    <div data-app-view="vi-step2"></div>
+  </div>
+
+  <div class="col-12">
+    <div class="alert alert-secondary p-2 pl-3"><strong>step3: 확인</strong></div>
+    <div data-app-view="vi-step3"></div>
+  </div>
+</div>
+
+<script>!function(app) {
+app.require([
+  app.path('/demo/view/com-info.js'),
+  app.path('/demo/view/vi-step1.js'),
+  app.path('/demo/view/vi-step2.js'),
+  app.path('/demo/view/vi-step3.js')
+]);
+app.trace.log(1, 'a', {}, []);
+}(MakeApp());</script>

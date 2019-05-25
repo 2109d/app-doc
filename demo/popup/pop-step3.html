@@ -1,0 +1,50 @@
+<div class="card" data-app-motion>
+  <div class="card-header">정보입력완료</div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="alert alert-secondary">
+          <div class="row">
+            <div class="col-12 mb-3"><strong>조회내용</strong></div>
+            <div class="col-12 mb-3">
+              <b class="badge">아이디: </b><span data-bind="text:vo.out.$data.srcId">xxx</span>
+            </div>
+            <div class="col-12 mb-3">
+              <b class="badge">이름: </b><span data-bind="text:vo.out.$data.srcName">홍길동</span>
+            </div>
+            <div class="col-12 mb-3">
+              <b class="badge">연락처: </b><span data-bind="phonenumber:vo.out.$data.srcTel">010-1234-1234</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="alert alert-primary">
+          <div class="row">
+            <div class="col-12 mb-3"><strong>변경내용 확인</strong></div>
+            <div class="col-12 mb-3">
+              <b class="badge">이름:</b><span data-bind="text:vo.out.$data.trgName">홍길동</span>
+            </div>
+            <div class="col-12 mb-3">
+              <b class="badge">연락처:</b><span data-bind="phonenumber:vo.out.$data.trgTel">010-1234-1234</span>
+            </div>
+            <div class="col-12 mb-3">
+              <b class="badge">주소:</b>
+              <span class="badge" data-bind="text:vo.out.$data.trgZipcode">12345</span>
+              <span data-bind="text:vo.out.$data.trgDefAddr">서울특별시 강남구 역삼로 118</span>
+              <span data-bind="text:vo.out.$data.trgDtlAddr">세부주소</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="offset-4 col-8 offset-md-8 col-md-4">
+        <button data-bind="event:on.complite" class="btn btn-block btn-primary">확인</button>
+      </div>
+    </div>
+
+  </div>
+</div>

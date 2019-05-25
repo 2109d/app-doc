@@ -1,0 +1,29 @@
+<div class="col-12 col-md-6">
+  <div class="alert alert-secondary">
+    <div class="row">
+      <div class="col-12 mb-3"><strong>조회 내용</strong></div>
+      <div class="col-12 mb-3">
+        <b class="badge">이름: </b><span data-bind="text:vo.srcName">홍길동</span>
+      </div>
+      <div class="col-12 mb-3">
+        <b class="badge">연락처: </b><span data-bind="phonenumber:vo.srcTel">010-1234-1234</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ko if:vo.trgName -->
+<div class="col-12 col-md-6">
+  <div class="alert alert-info">
+    <div class="row">
+      <div class="col-12 mb-3"><strong>입력 내용</strong></div>
+      <div class="col-12 mb-3">
+        <b class="badge">이름: </b><span data-bind="text:vo.trgName">홍길동</span>
+      </div>
+      <div class="col-12 mb-3">
+        <b class="badge">연락처: </b><span data-bind="phonenumber:vo.trgTel">010-1234-1234</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /ko -->

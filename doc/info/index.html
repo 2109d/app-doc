@@ -1,0 +1,163 @@
+<div class="row" data-app-motion>
+  <div class="col-12"><h2 class="h4">App 소개</h2></div>
+
+  <div class="col-12">
+    화면(뷰)과 스크립트(콘트롤러)를 연결하여 웹 어플리케이션의 자원을 관리 할수 있도록 한다.
+    app 인스턴스는 <b class="badge">MakeApp</b> 함수를 통해서 반환 받아 사용한다.
+  </div>
+
+  <div class="col-12 mt-3">
+    <div class="alert alert-secondary">
+<pre data-bind="jscode">
+// app 인스턴스
+var app = MakeApp();
+// 실행할 컨트롤러 명시
+var app = MakeApp('v1');
+// 다건인 경우 배열을 사용
+varapp = MakeApp(['v1', 'v2']);
+
+app.view('v1', function(ctrl){});
+app.view('v2', function(ctrl){});
+</pre>
+    </div>
+  </div>
+  
+  <!-- 화면과 컨트롤러 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold mb-2">화면과 컨트롤러</div>
+    <p>화면과 컨트롤러를 연결하는 방법은 화면의 미리 정의된 셀렉터에 반응 하는 컨트롤러를 작성 한다.
+    브라우저에 이미 렌더링된 태그에 바인딩 되는 <b class="badge">뷰</b>와
+    중간에 레이어 형태로 삽입되는 <b class="badge">팝업</b>두가지가 존재 한다.</p>
+    <p><b class="badge">뷰</b>의 경우 html 태그 엘리먼트의
+    <b class="badge">data-app-view</b>속성에 컨트롤러 이름을 작성하며,
+    app객체의 <b class="badge">view</b>메소드를 이용하여 해당 뷰를 관리 하는 컨트롤러를 작성한다.</p>
+    <p><b class="badge">팝업</b>의 경우 app객체의 <b class="badge">popup</b>메소드를 이용하여 컨트롤러를 작성하며,
+    <b class="badge">data-app-popup</b>속성에 컨트롤러 이름이 추가된 형태로 엘리먼트가 생성된다.
+    팝업은 app실행시 생성되는 <b class="badge">data-app-resource</b>엘리먼트의 자식형태로 레이어가 추가된다.</p>
+  </div>
+  <div class="col-12 mt-3">
+    <div class="alert alert-secondary">
+<pre data-bind="htmlcode">
+<div data-app-view="view-name"></div>
+
+<div data-app-resource>
+  <div data-app-popup="popup-name"></div>
+</div>
+</pre>
+    </div>
+    <div class="alert alert-secondary">
+<pre data-bind="jscode">
+app.view('viewName' function(ctrl) {});
+app.popup('popupName' function(ctrl) {});
+</pre>
+    </div>
+  </div>
+
+  <!-- 디자인 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold mb-2">디자인</div>
+    <p>미리 정의된 셀렉터를 사용하여 화면을 디자인 한다.</p>
+  </div>
+  <div class="col-12 col-md-6 mt-3">
+    <div class="card">
+      <div class="card-header">data-app-view</div>
+      <div class="card-body">
+        브라우저에 랜더링이 완료된 화면에 디자인을 적용 할때 사용한다.
+<pre data-bind="csscode" class="mt-3">
+[data-app-view] {
+  width: 100%;
+  background: #fff;
+}
+</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <div class="card">
+      <div class="card-header">data-app-resource</div>
+      <div class="card-body">
+        브라우저의 랜더링된 영역을 간섭하지 않는 역역으로 레이어를 새로 생성하기 위한 공간이다.
+        스타일의 포지션 값을 설정 하여 해당 공간에 삽이되는 레이어를 관리 할 수 있다.
+<pre data-bind="csscode" class="mt-3">
+[data-app-resource] {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+[data-app-resource] [data-app-popup] {
+  background:rgba(100, 100, 100, 0.8);
+}
+</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <div class="card">
+      <div class="card-header">data-app-popup</div>
+      <div class="card-body">
+        레이어 팝업등의 새로 생성되는 화면에 사용되며, 서로 다른 스타일의 레이어 팝업을 디자인 할 때 사용한다.
+<pre data-bind="csscode" class="mt-3">
+[data-app-popup] {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+[data-app-popup].full >:first-child {
+  width: 100vw;
+  height: 100vh;
+}
+[data-app-popup].modal >:first-child {
+  width: 90vw;
+  height: 80vh;
+}
+[data-app-popup].modal .container {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+</pre>        
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-12 col-md-6 mt-3">
+    <div class="card">
+      <div class="card-header">data-app-motion</div>
+      <div class="card-body">
+        화면의 애니메이션 적용시 사용되며, <b class="badge">data-app-motion</b>은
+        뷰와 팝업에서만 동작 하는 셀렉터 이다. 시작은 <b class="badge">open</b>으로
+        종료 일때는 <b class="badge">close</b>값을 컨트롤러에서 세팅해주며,
+        이값을 이용하여 스타일시트의 애니메이션을 적용한다.
+<pre data-bind="csscode" class="mt-3">
+[data-app-popup] [data-app-motion=open] {
+  animation: popup-open 1s 1;
+}
+[data-app-popup] [data-app-motion=close] {
+  animation: popup-close 1s 1;
+}
+
+@keyframes popup-open {
+  0% {
+    margin-top: 100px;
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+@keyframes popup-close {
+  0% {
+    opacity:1;
+  }
+  100% {
+    margin-top:-100px;
+    opacity: 0;
+  }
+}
+</pre>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,155 @@
+<div class="row" data-app-motion>
+  <div class="col-12"><h2 class="h4">속성값 / 메소드</h2></div>
+
+  <!-- 프로퍼티 -->
+  <div class="col-12 mt-3">
+    <div class="font-weight-bold">속성값</div>
+    <p><b class="badge text-primary">isOpen: boolean</b>
+    읽기 전용값으로 컨트롤러의 활성화 여부를 확인 할수 있다.</p>
+    <p><b class="badge text-primary">useRouter: boolean</b>
+    라우터 사용시 히스토리 적재에서 제회 시킬경우 false값을 세팅한다.</p>
+    <!-- html -->
+    <p><b class="badge text-primary">html: string</b>
+    랜더링 될때 사용할 html 템플릿을 직접 작성하여 사용할 수 있다.
+    값이 없을 경우 컨트롤러 영역안의 내용으로 랜더링 된다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+ctrl.html = '&lt;div&gt;template&lt;/div&gt;';
+</pre>
+    </div></p>
+    <!-- url -->
+    <p><b class="badge text-primary">url: string</b>
+    컨트롤러가 랜더링 될때 사용할 html 템플릿 경로로 해당 경로의 파일을 읽어와 랜더링 한다.
+    컨트롤러의 <b class="badge">html</b>속성값이 존재하는 경우 url은 무시되며 html값으로 랜더링을 수행한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+ctrl.url = 'template.html';
+</pre>
+    </div></p>
+    <!-- css -->
+    <p><b class="badge text-primary">css: object</b>
+    컨트롤러가 바인딩된 엘리멘트의 클래스를 추가(true) 삭제(false) 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+// class="open"
+ctrl.css = {open:true, close:false};
+</pre>
+    </div></p>
+    <!-- attr -->
+    <p><b class="badge text-primary">attr: object</b>
+    컨트롤러가 바인딩된 엘리먼트의 속성값을 변경.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+// id="idSample"
+ctrl.attr = {id:'idSample'};
+</pre>
+    </div></p>
+    <!-- style -->
+    <p><b class="badge text-primary">style: object</b>
+    컨트롤러가 바인딩된 엘리먼트의 스타일값 변경.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+// style="background:#fff; color:#000;"
+ctrl.style = {background:'#fff', color:'#000'};
+</pre>
+    </div></p>
+    <!-- vo -->
+    <p><b class="badge text-primary">vo: object</b>
+    컨트롤러와 화면의 변수값을 연결해 주는 역할을 한다.
+    컨트롤러의 <b class="badge">observer</b>메소드를 이용하여 초기화 한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+var vo = ctrl.vo;
+vo.text = ctrl.observer('text out');
+</pre>
+    </div></p>
+    <!-- on -->
+    <p><b class="badge text-primary">on: object</b>
+    컨트롤러와 화면의 이벤트를 연결해 주는 역할을 한다.
+    컨트롤러의 <b class="badge">handler</b>메소드를 이용하여 이벤트 핸들러를 받아 오며,
+    이벤트 핸들러의 event로 이벤트 리스너를 등록한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+var on = ctrl.on;
+// 이벤트 핸들러 취득
+on.button1 = ctrl.handler();
+// 클릭 이벤트 리스너 등록
+on.button1.event('click', function(evt) {});
+
+// 이벤트 핸들러 체이닝 처리로 리스너 등록
+on.button2 = ctrl.handler().event('click', function(evt) {});
+</pre>
+    </div></p>
+
+    <div class="font-weight-bold mt-3">메소드</div>
+    <!-- log -->
+    <p><b class="badge text-primary">log( [...] )</b>
+    콘솔로그 출력. 여러건 출력할 경우 콤마(,)로 구분하여 사용한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+ctrl.log(1, 'a', {b:1}, [1,2]);
+</pre>
+    </div></p>
+
+    <!-- onload -->
+    <p><b class="badge text-primary">onload()</b>
+    컨트롤러의 로드가 완료 되었을때 호출되는 이벤트.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+ctrl.onload(function() {
+  ctrl.log('화면 로드');
+});
+</pre>
+    </div></p>
+
+    <!-- extend -->
+    <p><b class="badge text-primary">set( name:string, prodecure:function )</b>
+    컨트롤러의 기능 추가시 사용.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+var viName = app.view('viName', function(ctrl) {});
+// 기능 추가
+viName.set('setTitle', function(ctrl, vl) {
+    ctrl.vo.title(vl);
+});
+
+// 추가된 기능 호출
+viName.get.setTitle('change');
+</pre>
+    </div></p>
+
+    <!-- observer -->
+    <p><b class="badge text-primary">observer( value:[string,object,array] )</b>
+    화면에 연결되는 변수값을 초기화 시키는데 사용되며, 파라메터의 유무에 따라 게터와, 세터로 사용된다.
+    초기값이 배열인경우 배열에서 재공하는 메소드와 동일한 기능의 메소드(indexOf, push, pop ...)를 사용할수 있다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+ctrl.vo.text = ctrl.observer('1');
+ctrl.vo.object = ctrl.observer({a:1});
+
+ctrl.vo.array = ctrl.observer([1]);
+ctrl.vo.array.push(2);
+</pre>
+    </div></p>
+
+    <!-- handler -->
+    <p><b class="badge text-primary">handler() :handl.event( name:string, prodecure:function )</b>
+    화면의 이벤트를 관리하는 객체를 반환한다. 반환한 객체의 event메소드를 통해 이벤트 리스너를 등록한다.
+    <div class="alert alert-secondary mt-3">
+<pre data-bind="jscode">
+// 이벤트 핸들러 반환
+ctrl.on.input = ctrl.handler();
+// 포커스 이벤트 등록
+ctrl.on.input.event('focus', function(evt) {});
+// 블러 이벤트 등록
+ctrl.on.input.event('blur', function(evt) {});
+
+// 이벤트 핸들러 체이닝
+ctrl.on.button = ctrl.handler().event('click', function(evt) {});
+</pre>
+    </div></p>
+
+  </div>
+
+</div>
+

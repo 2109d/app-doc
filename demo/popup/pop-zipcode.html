@@ -1,0 +1,42 @@
+<div class="card" data-app-motion>
+  <div class="card-header text-right d-flex flex-row justify-content-between">
+    <div>
+      <div class="input-group">
+        <input data-bind="value:vo.keyword" type="text" class="form-control form-control-sm border-info">
+        <div class="input-group-append">
+          <button data-bind="event:on.doro, css:vo.doro" class="btn btn-sm btn-outline-info">도로명</button>
+        </div>
+        <div class="input-group-append">
+          <button data-bind="event:on.jibun, css:vo.jibun" class="btn btn-sm btn-outline-info">지번</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button data-bind="event:on.close" class="btn btn-sm btn-primary">닫기</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="list-group">
+      <!-- ko foreach:vo.list -->
+      <a data-bind="event:$parent.on.selected" class="list-group-item list-group-item-action" href="#">
+        <div class="row">
+          <div class="col-2">
+            <span data-bind="text:$data.code" class="badge">12345</span>            
+          </div>
+          <div class="col-10">
+            <div>
+              <span class="badge text-primary">도로</span>
+              <span data-bind="text:$data.doro">서울특별시 강남구 역삼로 118</span>
+            </div>
+            <div>
+              <span class="badge text-info">지번</span>
+              <span data-bind="text:$data.jibun">서울특별시 강남구 역삼로 118</span>
+            </div>
+          </div>
+        </div>
+
+      </a>
+      <!-- /ko -->
+    </div>
+  </div>
+</div>

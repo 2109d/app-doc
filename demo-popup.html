@@ -1,0 +1,57 @@
+---
+layout: default
+title: "뷰 팝업"
+---
+
+<div data-app-view="vi-main" class="row">
+  <div class="col-12">
+    <div class="alert alert-secondary p-2 pl-3"><strong>회원조회</strong></div>
+  </div>
+  <div class="col-12">
+    <div class="list-group">
+      <!-- ko foreach:{as:'mbr', data:vo.list} -->
+      <a data-bind="event:$parent.on.selected, waypoint" class="list-group-item list-group-item-action d-md-flex flex-row justify-content-start" href="#">
+        <div class="mr-3">
+          <span class="badge">아이디:</span>
+          <span data-bind="text:mbr.id">xxx</span>
+        </div>
+        <div class="mr-3">
+          <span class="badge">이름:</span>
+          <span data-bind="text:mbr.name">홍길동</span>
+        </div>
+        <div class="mr-3">
+          <span class="badge">연락처:</span>
+          <span data-bind="phonenumber:mbr.tel">010-1234-1234</span>
+        </div>
+      </a>
+      <!-- /ko -->
+    </div>
+  </div>
+</div>
+<script>!function(app) {
+app.require([
+  app.path('/demo/popup/pop-zipcode.js'),
+  app.path('/demo/popup/pop-step2.js'),
+  app.path('/demo/popup/pop-step3.js')
+]);
+app.view('viMain', function(ctrl) {
+  var http = app.http;
+  var popStep2 = app.controller('popStep2');
+
+  // - value -
+  var vo = ctrl.vo;
+  vo.list = ctrl.observer([]);
+
+  // - event -
+  var on = ctrl.on;
+  on.selected = ctrl.handler().event('click', function(ev, vl) {
+    popStep2.open(ctrl, vl);
+  });
+
+  // - local area -
+  http.get(ctrl, app.path('/demo/member.json')).then(function(data) {
+    vo.list(data);
+  });
+});
+}(MakeApp('viMain'));</script>
+  

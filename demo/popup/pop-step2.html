@@ -1,0 +1,58 @@
+<div class="card" data-app-motion>
+  <div class="card-header">회원정보 입력</div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="alert alert-secondary">
+          <div class="row">
+            <div class="col-12 mb-3"><strong>조회 내용</strong></div>
+            <div class="col-12 mb-3">
+              <b class="badge">아이디: </b><span data-bind="text:vo.srcId">xxx</span>
+            </div>
+            <div class="col-12 mb-3">
+              <b class="badge">이름: </b><span data-bind="text:vo.srcName">홍길동</span>
+            </div>
+            <div class="col-12 mb-3">
+              <b class="badge">연락처: </b><span data-bind="phonenumber:vo.srcTel">010-1234-1234</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="row">
+          <label class="col-12" for="s2-name">이름</label>
+          <div class="col-12 mb-3">
+            <input data-bind="value:vo.trgName, movepoint" data-movepoint="trgName" class="form-control" type="text" id="s2-name" placeholder="이름을 입력하세요.">
+          </div>
+          <label class="col-12" for="s2-tel">연락처</label>
+          <div class="col-12 mb-3">
+            <input data-bind="value:vo.trgTel, movepoint" data-movepoint="trgTel" class="form-control" type="tel" id="s2-tel" maxlength="11" placeholder="연락처(숫자)를 10자 또는 11자로 입력하세요.">
+          </div>
+          <label class="col-12">주소</label>
+          <div class="input-group col-12 mb-2">
+            <input data-bind="value:vo.trgZipcode" type="tel" class="form-control" placeholder="우편번호" readonly>
+            <div class="input-group-append">
+              <button data-bind="event:on.zipcode, waypoint, movepoint" data-movepoint="trgZipcode" class="btn btn-outline-secondary" id="s2-zipcode">우편번호</button>
+            </div>
+          </div>
+          <div class="col-12 mb-2">
+            <input data-bind="value:vo.trgDefAddr" type="text" class="form-control" placeholder="기본주소" readonly>
+          </div>
+          <div class="col-12">
+            <input data-bind="value:vo.trgDtlAddr, movepoint" data-movepoint="trgDtlAddr" type="text" class="form-control" placeholder="세부주소">
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-4 offset-md-6 col-md-2">
+        <button data-bind="event:on.close" class="btn btn-block btn-outline-primary">이전</button>
+      </div>
+      <div class="col-8 col-md-4">
+        <button data-bind="event:on.next" class="btn btn-block btn-primary">다음</button>
+      </div>
+    </div>
+  </div>
+</div>
