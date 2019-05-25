@@ -110,7 +110,7 @@
           else erlog(ctrl, {url:url, data:rs, message:'데이터수신 오류입니다.'});
         }).catch(function(err) {
           removeProgress(opt);
-          erlog(ctrl, {url:url, data:{err}, message:'통신 오류입니다.'})
+          erlog(ctrl, {url:url, data:{err:err}, message:'통신 오류입니다.'})
         });
       });
     };
