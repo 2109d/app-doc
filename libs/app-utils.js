@@ -107,10 +107,10 @@
           var status = rs.status, data = rs.data;
           removeProgress(opt);
           if(data && status == 200) rslog(ctrl, url, rs, opt), resolve(data);
-          else erlog(ctrl, {url, data:rs, message:'데이터수신 오류입니다.'});
+          else erlog(ctrl, {url:url, data:rs, message:'데이터수신 오류입니다.'});
         }).catch(function(err) {
           removeProgress(opt);
-          erlog(ctrl, {url, data:{err}, message:'통신 오류입니다.'})
+          erlog(ctrl, {url:url, data:{err}, message:'통신 오류입니다.'})
         });
       });
     };
