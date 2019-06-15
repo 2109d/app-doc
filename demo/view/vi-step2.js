@@ -1,8 +1,5 @@
 !function(app) {
 app.view('viStep2', function(ctrl) {
-  var viStep3 = app.controller('viStep3');
-  var comInfo = app.controller('comInfo');
-
   // - properties -
   ctrl.url = app.path('/demo/view/vi-step2.html');
   ctrl.onload = function() {
@@ -20,17 +17,19 @@ app.view('viStep2', function(ctrl) {
     ctrl.close();
   });
   on.next = ctrl.handler().event('click', function() {
-    if(!vo.trgName.$data) return app.alert(ctrl, '이름을 입력하세요.').then(function() {
-      ctrl.get.movepoint('trgName');
+    if(!vo.trgName.$data) return ctrl.alert('이름을 입력하세요.').then(function() {
+      ctrl.movepoint('trgName');
     });
-    if(vo.trgTel.$length < 11) return app.alert(ctrl, '연락처를 입력하세요.').then(function() {
-      ctrl.get.movepoint('trgTel');
+    if(vo.trgTel.$length < 11) return ctrl.alert('연락처를 입력하세요.').then(function() {
+      ctrl.movepoint('trgTel');
     });
 
-    ctrl.active = false;
+    var comInfo = app.ctrl.comInfo;
     comInfo.vo.trgName(vo.trgName.$data);
     comInfo.vo.trgTel(vo.trgTel.$data);
-    viStep3.open(ctrl).then(function() {
+
+    ctrl.active = false;
+    ctrl.open('viStep3').then(function() {
       ctrl.active = true;
     });
   });

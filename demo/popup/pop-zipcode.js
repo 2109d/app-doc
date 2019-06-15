@@ -1,14 +1,14 @@
 !function(app) {
 app.popup('popZipcode', function(ctrl) {
-  var http = app.http, assign = app.util.assign;
+  var http = ctrl.http(), util = ctrl.util();
   var active = {'btn-outline-info':false, ' btn-info':true};
   var inactive = {'btn-outline-info':true, ' btn-info':false};
   var _list = [];
 
   // - properties -
-  ctrl.css = {sheet:true};
+  ctrl.css({sheet:true});
   ctrl.url = app.path('/demo/popup/pop-zipcode.html');
-  http.get(ctrl, app.path('/demo/zipcode.json')).then(function(data) {
+  http.get(app.path('/demo/zipcode.json')).then(function(data) {
     _list = [].concat(data);
     vo.list(data);
   });
@@ -27,8 +27,8 @@ app.popup('popZipcode', function(ctrl) {
   });
   on.doro = ctrl.handler().event('click', function() {
     vo.keyword.$data = '중앙로';
-    vo.doro(assign({}, active));
-    vo.jibun(assign({}, inactive));
+    vo.doro(util.assign({}, active));
+    vo.jibun(util.assign({}, inactive));
 
     vo.list.removeAll();
     _list.forEach(function(vl) {
@@ -37,8 +37,8 @@ app.popup('popZipcode', function(ctrl) {
   });
   on.jibun = ctrl.handler().event('click', function() {
     vo.keyword.$data = '역삼동';
-    vo.doro(assign({}, inactive));
-    vo.jibun(assign({}, active));
+    vo.doro(util.assign({}, inactive));
+    vo.jibun(util.assign({}, active));
 
     vo.list.removeAll();
     _list.forEach(function(vl) {

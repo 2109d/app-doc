@@ -35,9 +35,6 @@ app.require([
   app.path('/demo/popup/pop-step3.js')
 ]);
 app.view('viMain', function(ctrl) {
-  var http = app.http;
-  var popStep2 = app.controller('popStep2');
-
   // - value -
   var vo = ctrl.vo;
   vo.list = ctrl.observer([]);
@@ -45,13 +42,35 @@ app.view('viMain', function(ctrl) {
   // - event -
   var on = ctrl.on;
   on.selected = ctrl.handler().event('click', function(ev, vl) {
-    popStep2.open(ctrl, vl);
+    ctrl.open('popStep2', vl);
   });
 
   // - local area -
-  http.get(ctrl, app.path('/demo/member.json')).then(function(data) {
+  var http = ctrl.http({stealth:true});
+  http.get(app.path('/demo/member.json')).then(function(data) {
     vo.list(data);
   });
+
+  // var http2 = ctrl.http();
+  // http2.get('http://localhost:38080/doc/demo/member-list.ajax', {id:'test', a:[1,2,3]}).then(function(data) {
+  //   ctrl.log(data);
+  // }).catch(function() {
+  //   app.trace.stack(app.trace.error());
+  //   console.log(app.trace.error().length);
+  // });
+  // http2.post('http://localhost:38080/doc/demo/member-list.ajax', {id:'test', a:[1,2,3]}).then(function(data) {
+  //   ctrl.log(data);
+  // });
+  // http2.submit('http://localhost:38080/doc/demo/member-list.ajax', {id:'test', a:[1,2,3]}).then(function(data) {
+  //   ctrl.log(data);
+  // });
+  // http2.async([
+  //   {method:'POST', url:'http://localhost:38080/doc/demo/member-list.ajax', param:{id:'test', a:[1,2,3]}},
+  //   {method:'POST', url:'http://localhost:38080/doc/demo/member-list.ajax', param:{id:'test', a:[1,2,3]}},
+  //   {method:'POST', url:'http://localhost:38080/doc/demo/member-list.ajax', param:{id:'test', a:[1,2,3]}}
+  // ]).then(function(data) {
+  //   ctrl.log(data);
+  // });
 });
 }(MakeApp('viMain'));</script>
   

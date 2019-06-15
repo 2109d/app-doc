@@ -1,0 +1,19 @@
+[data-app-popup] {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+/* 풀레이어형식 팝업 */
+[data-app-popup].full >:first-child {
+  width: 100vw;
+  height: 100vh;
+}
+/* 모달형식의 팝업 */
+[data-app-popup].modal >:first-child {
+  width: 90vw;
+  height: 80vh;
+}
+[data-app-popup].modal .container {
+  max-height: 80vh;
+  overflow-y: auto;
+}

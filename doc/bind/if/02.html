@@ -1,0 +1,10 @@
+<input type="radio" value="1" data-bind="checked:vo.choice">선택
+<input type="radio" value="2" data-bind="checked:vo.choice">입력
+
+<select>
+  <option value="1">1. xxx</option>
+  <!-- ko if:vo.chois.$data == '1' -->
+  <option value="2">2. xxx</option>
+  <!-- /ko -->
+</select>
+<input type="text" data-bind="if:vo.chois.$data == '2'">

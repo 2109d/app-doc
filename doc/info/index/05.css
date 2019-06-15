@@ -1,0 +1,8 @@
+[data-app-resource] {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+[data-app-resource] [data-app-popup] {
+  background:rgba(100, 100, 100, 0.8);
+}

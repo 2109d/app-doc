@@ -1,14 +1,13 @@
 !function(app) {
 app.view('viStep1', function(ctrl) {
-  var viStep2 = app.controller('viStep2');
-  var comInfo = app.controller('comInfo');
-  var http = app.http, assign = app.util.assign;
+  var http = ctrl.http(), util = ctrl.util();
 
   // - properties -
   ctrl.url = app.path('/demo/view/vi-step1.html');
   ctrl.onload = function() {
     ctrl.el.focus();
     ctrl.log(1, 'a', {}, []);
+    // app.trace.stack(app.trace.error());
   };
 
   // - value -
@@ -20,15 +19,15 @@ app.view('viStep1', function(ctrl) {
   // - event -
   var on = ctrl.on;
   on.search = ctrl.handler().event('click', function() {
-    if(vo.id.$length < 4) return app.alert(ctrl, '아이디를 4자이상 입력하세요.').then(function() {
-      ctrl.get.movepoint('id');
+    if(vo.id.$length < 4) return ctrl.alert('아이디를 4자이상 입력하세요.').then(function() {
+      ctrl.movepoint('id');
     });
 
     vo.isSearch(true);
     vo.list.removeAll();
-    http.get(ctrl, app.path('/demo/member.json')).then(function(data) {
+    http.get(app.path('/demo/member.json')).then(function(data) {
       data.forEach(function(vl) {
-        RegExp(vo.id.$data).test(vl.id) && vo.list.push(assign(vl, {
+        RegExp(vo.id.$data).test(vl.id) && vo.list.push(util.assign(vl, {
           active: ctrl.observer(false),
           selected: listSelected
         }));
@@ -47,13 +46,16 @@ app.view('viStep1', function(ctrl) {
     vo.list.$data.some(function(vl) {
       return vl.active.$data && (item = vl);
     });
-    if(!item) return app.alert(ctrl, '조회항목을 선택하세요.');
+    if(!item) return ctrl.alert('조회항목을 선택하세요.');
 
-    ctrl.active = false;
+    var comInfo = app.ctrl.comInfo;
     comInfo.vo.srcName(item.name);
     comInfo.vo.srcTel(item.tel);
-    viStep2.open(ctrl).then(function() {
+
+    ctrl.active = false;
+    ctrl.open('viStep2').then(function() {
       ctrl.active = true;
+      ctrl.movepoint('next');
     });
   });
 

@@ -3,7 +3,7 @@
     "title": "App기본정보",
     "links": [
       { "title": "기본기능", "url": "/?path=info-std" },
-      { "title": "다운로드", "url": "/app-makeup.zip" }
+      { "title": "다운로드", "url": "/libs/app-makeup.js" }
     ]
   }, {
     "title": "화면 바인딩",

@@ -1,0 +1,23 @@
+<!-- view.html -->
+
+<!-- 뷰 컨트롤러 선언 -->
+<div data-app-view="vi-sample">
+  <!-- ko component:'com-sample' -->
+  콤포넌트 랜더링영역
+  <!-- /ko -->
+  <button data-bind="event:on.popup">open popup</button>
+</div>
+
+<div data-app-resource>
+  <!-- 팝업 컨트롤러 오픈시 추가된다. -->
+  <div data-app-popup="popup-sample"></div>
+</div>
+
+
+<!-- popup.html -->
+<div>
+  <!-- ko component:'com-sample' -->
+  콤포넌트 랜더링영역
+  <!-- /ko -->
+  <button data-bind="event:on.close">close popup</button>
+</div>

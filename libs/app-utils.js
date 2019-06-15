@@ -1,180 +1,181 @@
 !function(app) {
-  // util
-  var assign, entries, isType;
-  app.add('util', (function(util){
-    util.assign = assign = function() {
-      arguments[0] = arguments[0] || {};
-      return Object.assign.apply(Object, arguments);
-    };
-    util.entries = entries = function(vl) { return Object.entries(vl); }
-    util.isType = isType = function(vl, type) {
-      if(Array.isArray(vl) && type == 'array') return true;
-      else return typeof vl == type;
-    };
-    var clone = util.clone = function(vl) {
-      return isType(vl, 'array') ? [].concat(vl) : assign({}, vl);
-    };
-  
-    return util;
-  })({}));
+  Array.first || Object.defineProperties(Array.prototype, {
+    first: {get: function() {return this[0]}}
+  });
+  Array.last || Object.defineProperties(Array.prototype, {
+    last: {get: function() {return this[this.length-1]}}
+  });
+  Array.prototype.reverseFor = Array.reverseFor || function(proc) {
+    var length = this.length;
+    while(--length) { proc && proc(this[length]); }
+  };
 
-  app.add('ajax', (function(ajax){
-    ajax.get = function(ctrl, url) {
-      return fetch(url).then(function(rs) {
-        return /json/.test(rs.headers.get('Content-Type')) ? rs.json() : rs.text();
-      });
-    };
-    return ajax;
-  })({}));
+  // util
+  var util = {};
+  var assign = util.assign = function() { return Object.assign.apply(Object, arguments); };
+  var entries = util.entries = function(vl) { return Object.entries(vl); };
+  var istype = util.istype = function(vl, tp) { return Array.isArray(vl) && tp == 'array' ? true : typeof vl == tp; };
+  var clone = util.clone = function(vl) { return istype(vl, 'array') ? [].concat(vl) : assign({}, vl); };
+  app.extend.util = function() { return util; };
 
   // http
-  app.add('http', (function(http){
-    var meta = {credentials:'include'};  // cors cookies
-    var trace = app.trace, progressbar;
-    var log = function(prm, opt) {
-      trace.log((opt||{}).hierarchy ? JSON.stringify(prm,'','  ') : prm, opt);
-    };
-    var rqlog = function(ctrl, url, prm, opt) {
-      var type=ctrl.type, name=ctrl.name;
-      log(prm, assign(opt, {option:'http:request| '+type+':'+name+'| ' +url, color:'#07f'}));
-    };
-    var rslog = function(ctrl, url, rs, opt) {
-      var type=ctrl.type, name=ctrl.name;
-      log(rs, assign(opt, {option:'http:response| '+type+':'+name+'| ' +url, color:'#d34'}));
-    };
-    var erlog = function(ctrl, vl) {
-      var data = vl.data.data||{};
-      trace.error(vl.url, vl.data);
-      app.alert(ctrl, data.message||vl.message).then(function() { reject(vl.data); });
-    };
-
-    var makeProgress = function(opt) {
-      var stealth = (opt||{}).stealth;
-      if(progressbar || stealth) return;
-
-      progressbar = app.insertResource();
-      progressbar.setAttribute('data-app-loadingbar', '');
-  
-      var prg = progressbar.appendChild(document.createElement('div'));
-      prg.classList.add('progress');
-      prg.classList.add('rounded-0');
-  
-      var bar = prg.appendChild(document.createElement('div'));
-      bar.classList.add('progress-bar');
-      bar.classList.add('progress-bar-striped');
-      bar.classList.add('progress-bar-animated');
-      bar.style.width = '100%';
-    };
-    var removeProgress = function(opt) {
-      if((opt||{}).stealth) return;
-      progressbar = app.removeResource(progressbar);
-    };
-    var urlParams = function(vl) {
-      return entries(vl).reduce(function(url, ent) {
-        var vl = ent.pop(), ky = ent.pop();
-    
-        if(isType(vl, 'array')) vl.forEach(function(v) { url.append(ky, v) });
-        else if(isType(vl, 'object')) url.append(ky, JSON.stringify(vl));
-        else url.append(ky, vl);
-
-        return url;
-      }, new URLSearchParams).toString();
-    };
-    var postParams = function(vl) { return vl && JSON.stringify(vl); };
-    var formParams = function(vl) {
-      return entries(vl).reduce(function(frm, ent) {
-        var vl = ent.pop(), ky = ent.pop();
-    
-        if(isType(vl, 'array')) vl.forEach(function(v) { frm.append(ky, v) });
-        else if(isType(vl, 'object')) frm.append(ky, JSON.stringify(vl));
-        else frm.append(ky, vl);
-
-        return frm;
-      }, new FormData);
-    };
-    var ajax = function(url, meta) {
-      return fetch(url, meta).then(function(rs) {
-        var data = rs[/json/.test(rs.headers.get('Content-Type')) ? 'json' : 'text']();
-        return data.then(function(data) {
-          return {status:rs.status, data:data};
-        });
+  var ajax = function(url, request) {
+    return fetch(url, request).then(function(rs) {
+      var isJson = /application\/json/.test(rs.headers.get('Content-Type'));
+      var data = isJson ? rs.json() : rs.text();
+      return data.then(function(data){
+        return {status:rs.status, data:data};
       });
-    };
-    var query = function(ctrl, url, meta, opt) {
-      makeProgress(opt);
-      return new Promise(function(resolve, reject) {
-        ajax(url, meta).then(function(rs) {
-          var status = rs.status, data = rs.data;
-          removeProgress(opt);
-          if(data && status == 200) rslog(ctrl, url, rs, opt), resolve(data);
-          else erlog(ctrl, {url:url, data:rs, message:'데이터수신 오류입니다.'});
-        }).catch(function(err) {
-          removeProgress(opt);
-          erlog(ctrl, {url:url, data:{err:err}, message:'통신 오류입니다.'})
-        });
-      });
-    };
+    });
+  };
+  var urlParams = function(url, param) {
+    var vl = entries(param||{}).reduce(function(qry, ent) {
+      var ky=ent[0], vl=ent[1];
+      return (istype(vl, 'array') ?
+        vl.forEach(function(v) {qry.push(ky +'='+ encodeURIComponent(v))}) :
+        qry.push(ky +'='+ encodeURIComponent(vl))
+      ),qry;
+    }, []).join('&');
+    if(!url) return vl;
+    return url + (vl ? '?'+vl : '');
+  };
+  var postParams = function(vl) { return vl && encodeURIComponent(JSON.stringify(vl)); };
+  var http = function(ctrl, stealth, hierarchy) {
+    assign(this, {
+      _ctrl: ctrl,
+      _stealth: stealth,
+      _hierarchy: hierarchy,
+      _progress: null,
+      _request: null
+    });
+  };
+  http.prototype.progressOn = function() {
+    var _stealth=this._stealth, _progress=this._progress;
+    if(_stealth || _progress) return this;
 
-    // http.get(ctrl, '/xxx.ajax', {}, {stealth, hierarchy});
-    http.get = function(ctrl, url, prm, opt) {
-      url += prm ? '?' + urlParams(prm).toString() : '';
-      rqlog(ctrl, url, prm, opt);
-      return query(ctrl, url, null, opt);
-    };
-    // http.post(ctrl, '/xxx.ajax', {}, {stealth, hierarchy});
-    http.post = function(ctrl, url, prm, opt) {
-      rqlog(ctrl, url, prm, opt);
-      return query(ctrl, url, assign(meta, {
-        method: 'post',
-        body: postParams(prm)
-      }), opt);
-    };
-    // http.submit(ctrl, '/xxx.ajax', {}, {stealth, hierarchy});
-    http.submit = function(ctrl, url, prm, opt) {
-      rqlog(ctrl, url, prm, opt);
-      return query(ctrl, url, assign(meta, {
-        method: 'post',
-        body: urlParams(prm).toString(),
-        headers: new Headers({
-          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-        })
-      }), opt);
-    };
-    // http.async(ctrl, [{url, param}], {stealth, hierarchy});
-    http.async = function(ctrl, que, opt) {
-      return new Promise(function(resolve, reject) {
-        if(!isType(que, 'array')) return trace.error('http:error| param is array'), reject();
-        var message = function(vl, def) {
-          var urls = que.map(function(vl) { return vl.url; }).join(',');
-          var msg = (vl[0] || {}).message;
-          trace.error('http:error| '+urls, vl);
-          app.alert(ctrl, msg || def).then(function() { reject(vl); });
-        };
+    var progressbar = app.insertResource();
+    progressbar.setAttribute('data-app-loadingbar', '');
 
-        makeProgress(opt);
-        Promise.all(que.map(function(vl) {
-          rqlog(ctrl, vl.url, vl.param, opt);
-          return ajax(vl.url, assign(meta, {
-            method:'post', body:postParams(vl.param)
-          }));
-        })).then(function(ls) {
-          var data = ls.reduce(function(data, vl) {
-            vl.status == 200 && data.push(vl.data);
-            return data;
-          }, []);
+    var prog = progressbar.appendChild(document.createElement('div'));
+    prog.classList.add('progress');
+    prog.classList.add('rounded-0');
 
-          removeProgress(opt);
-          if(ls.length == data.length) resolve(ls.map(function(vl) {
-              return rslog(ctrl, que.shift().url, vl, opt), vl.data;
-            }));
-          else message(ls, '통신 오류입니다.');
-        }).catch(function(err) {
-          removeProgress(opt);
-          message([{err:err}], '통신 오류입니다.');
-        });
-      });
-    };
-    // http.upload = function() {formParams(prm)}
-    return http;
-  })({}));
+    var bar = prog.appendChild(document.createElement('div'));
+    bar.classList.add('progress-bar');
+    bar.classList.add('progress-bar-striped');
+    bar.classList.add('progress-bar-animated');
+    bar.style.width = '100%';
+
+    return assign(this, {_progress:progressbar});
+  };
+  http.prototype.progressOff = function() {
+    var _stealth=this._stealth, _progress=this._progress;
+    if(_stealth) return this;
+
+    app.removeResource(_progress);
+    return assign(this, {_progress:null});
+  };
+  http.prototype.rqlog = function() {
+    if(!this._source) return;
+    var method=this._source.method, url=this._source.url, data=this._source.param;
+    var _hierarchy = this._hierarchy;
+    var _ctrl = this._ctrl||{};
+    app.trace.option({
+      label: '[' +method+ ':request:'+_ctrl.name+'] ' +(url||''),
+      color:'#07f'
+    }).log(_hierarchy ? JSON.stringify(data,'','  ') : data);
+  };
+  http.prototype.rslog = function(data) {
+    if(!this._source) return;
+    var method=this._source.method, url=this._source.url;
+    var _hierarchy = this._hierarchy;
+    var _ctrl = this._ctrl||{};
+    app.trace.option({
+      label: '[' +method+ ':response:'+_ctrl.name+'] ' + (url||''),
+      color:'#2a4'
+    }).log(_hierarchy ? JSON.stringify(data,'','  ') : data);
+  };
+  http.prototype.erlog = function(data) {
+    if(!this._source) return;
+    var method=this._source.method, url=this._source.url, param=this._source.param;
+    var _ctrl = this._ctrl||{};
+    app.trace.option({
+      label: '[' +method+ ':error:'+_ctrl.name+'] ' + (url||'')
+    }).error({param:param, error:data});
+  };
+  http.prototype.setSource = function(vl) {
+    return assign(this, {_source:vl});
+  };
+  http.prototype.setRequest = function(vl) {
+    return assign(this, {_request: assign({method:'GET', credentials:'include'}, vl)});
+  };
+  http.prototype.send = function(url) {
+    var _this = this;
+    var _request = this._request;
+
+    _this.progressOn().rqlog();
+    return ajax(url, _request).then(function(result) {
+      var status=result.status, data=result.data;
+      if(status == 200) {
+        _this.progressOff().rslog(result);
+        return data;
+      } else throw result;
+    }).catch(function(error) {
+      var data = error.data||{};
+      var code = data.code || '';
+      var message = data.message || '통신오류';
+
+      _this.progressOff().erlog(error);
+      return _this._ctrl.alert(message+'['+code+']').then(function() {throw error;});
+    });
+  };
+  // ----- public ----- //
+  http.prototype.get = function(url, param) {
+    return this.setSource({method:'GET', url:url, param:param})
+    .setRequest({method:'GET'})
+    .send(urlParams(url, param));
+  };
+  http.prototype.post = function(url, param) {
+    return this.setSource({method:'POST', url:url, param:param})
+    .setRequest({method:'POST', body:postParams(param)})
+    .send(url);
+  };
+  http.prototype.submit = function(url, param) {
+    return this.setSource({method:'SUBMIT', url:url, param:param})
+    .setRequest({
+      method:'POST', body:urlParams(null,param),
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+    }).send(url);
+  };
+  http.prototype.async = function(list) {
+    var _this = this;
+
+    _this.setSource({method:'ASYNC', param:list}).progressOn().rqlog();
+    return Promise.all(list.map(function(vl) {
+      var url=vl.url, param=vl.param, method=vl.method;
+      var request={method:'GET', credentials:'include'};
+      switch(method) {
+      case 'POST': return ajax(url, assign(request, {method:'POST', body:postParams(param)}));
+      case 'SUBMIT': return ajax(url, assign(request, {
+          method:'POST', body:urlParams(null,param),
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+        }));
+      case 'GET': default: return ajax(urlParams(url, param), request);
+      }
+    })).then(function(result) {
+      var success = result.reduce(function(suc, vl) {
+        return (vl.status == 200 && suc.push(vl.data)), suc;
+      }, []);
+      if(result.length == success.length) {
+        _this.progressOff().rslog(result);
+        return success;
+      } else throw result;
+    }).catch(function(error) {
+      _this.progressOff().erlog(error);
+      return _this._ctrl.alert('통신오류').then(function() {throw error;});
+    });
+  };
+  app.extend.http = function(ctrl, option) {
+    return new http(ctrl, (option||{}).stealth, (option||{}).hierarchy);
+  };
 }(MakeApp());

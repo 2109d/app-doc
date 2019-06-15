@@ -1,13 +1,10 @@
 !function(app) {
 app.popup('popStep2', function(ctrl, param) {
-  if(!param) return app.alert(ctrl, '조회 내용을 확인 하세요.')
+  if(!param) return ctrl.alert('조회 내용을 확인 하세요.')
     .then(function() { ctrl.close(); });
 
-  var popZipcode = app.controller('popZipcode');
-  var popStep3 = app.controller('popStep3');
-
   // - properties -
-  ctrl.css = {view:true};
+  ctrl.css({view:true});
   ctrl.url = app.path('/demo/popup/pop-step2.html');
 
   // - value -
@@ -26,7 +23,7 @@ app.popup('popStep2', function(ctrl, param) {
   // - event -
   var on = ctrl.on;
   on.zipcode = ctrl.handler().event('click', function() {
-    popZipcode.open(ctrl).then(function(data) {
+    ctrl.open('popZipcode').then(function(data) {
       if(!data) return;
       vo.trgZipcode.$data = data.code;
       vo.trgDefAddr.$data = data.doro;
@@ -37,23 +34,23 @@ app.popup('popStep2', function(ctrl, param) {
   });
   on.next = ctrl.handler().event('click', function() {
     if(!vo.trgName.$data)
-      return app.alert(ctrl, '이름을 입력하세요.').then(function() {
-        ctrl.get.movepoint('trgName');
+      return ctrl.alert('이름을 입력하세요.').then(function() {
+        ctrl.movepoint('trgName');
       });
     if(!/^\d{10,11}$/.test(vo.trgTel.$data))
-      return app.alert(ctrl, '연락처(숫자)를 10자 또는 11자로 입력하세요.').then(function() {
-        ctrl.get.movepoint('trgTel');
+      return ctrl.alert( '연락처(숫자)를 10자 또는 11자로 입력하세요.').then(function() {
+        ctrl.movepoint('trgTel');
       });
     if(!vo.trgZipcode.$data)
-      return app.alert(ctrl, '주소를 입력하세요.').then(function() {
-        ctrl.get.movepoint('trgZipcode');
+      return ctrl.alert( '주소를 입력하세요.').then(function() {
+        ctrl.movepoint('trgZipcode');
       });
     if(!vo.trgDtlAddr.$data)
-      return app.alert(ctrl, '세부주소를 입력하세요.').then(function() {
-        ctrl.get.movepoint('trgDtlAddr');
+      return ctrl.alert( '세부주소를 입력하세요.').then(function() {
+        ctrl.movepoint('trgDtlAddr');
       });
 
-    popStep3.open(ctrl, {
+    ctrl.open('popStep3', {
       srcId: param.id,
       srcName: param.name,
       srcTel: param.tel,

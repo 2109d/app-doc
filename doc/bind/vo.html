@@ -1,193 +1,98 @@
 <div class="row" data-app-motion>
-  <div class="col-12"><h2 class="h4">입 / 출력</h2></div>
-
   <div class="col-12">
-  <p>컨트롤러에 의해 바인딩된 화면에 값을 입력 받거나,
-  출력 받으려는 경우 <b class="badge">data-bind</b>속성값에 수행할 형태를 디렉티브로 명시 하여,
-  해당 디렉티브를 통해 데이터를(모델: vo객체)에 전달한다.</p>
-  <p>vo객체의 프로토타입은 디렉티브의 변화를 감지 가능한 값으로 <b class="badge">observer</b>메소드를 통해
-  초기화 하며, 파라메터의 유무에 따라 게터와 세터의 형태로 사용한다.</p>
-  <ul class="list-group mt-3">
-    <li class="list-group-item p-2">
-      <b class="badge">$data:</b>화면에 바인딩된 vo객체에 할당된 값
-    </li>
-    <li class="list-group-item p-2">
-      <b class="badge">$length:</b>vo객체에 의해 할당된 값의 길이.
-    </li>
-  </ul>
-
+    <h2 class="h4">입 / 출력</h2>
+    <p>컨트롤러에 의해 바인딩된 화면에 값을 입력 받거나,
+    출력 받으려는 경우 <b class="badge">data-bind</b>속성값에 수행할 형태를 디렉티브로 명시 하여,
+    해당 디렉티브를 통해 데이터를(모델: vo객체)에 전달한다.</p>
+    <p>vo객체의 프로토타입은 디렉티브의 변화를 감지 가능한 값으로 <b class="badge">observer</b>메소드를 통해
+    초기화 하며, 파라메터의 유무에 따라 게터와 세터의 형태로 사용한다.</p>
+    <ul class="list-group mt-3">
+      <li class="list-group-item p-2">
+        <b class="badge">$data:</b>화면에 바인딩된 vo객체에 할당된 값
+      </li>
+      <li class="list-group-item p-2">
+        <b class="badge">$length:</b>vo객체에 의해 할당된 값의 길이.
+      </li>
+    </ul>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<div data-app-view="view-name">
-  <input type="text" placeholder="이미지 경로 입력" data-bind="value:vo.imgUrl">
-  <div>
-    이미지 경로: <span data-bind="text:vo.imgUrl"></span>
-    <img data-bind="attr:{href:vo.imgUrl}">
-  </div>
-</div>
-</pre>
-<pre data-bind="jscode">
-app.view('viewName', function(ctrl) {
-  ctrl.vo.imgUrl = ctrl.observer('');
-});
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/01.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/01.js'"></pre>
     </div>
   </div>
 
   <!-- TEXT 출력 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">TEXT 출력<b class="badge text-primary">text</b></div>
-    문자열 원형 그대로의 값을 출력한다.
+    <p>문자열 원형 그대로의 값을 출력한다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<div data-bind="text:vo.outText"></div>
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.outText = ctrl.observer('');
-ctrl.vo.outText('&lt;span&gt;html 마크업 미적용&lt;/span&gt;');
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/02.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/02.js'"></pre>
     </div>
   </div>
   
   <!-- HTML 출력 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">HTML 출력<b class="badge text-primary">html</b></div>
-    문자열의 값을 html의 마크업을 적용한 상태로 출력한다.
+    <p>문자열의 값을 html의 마크업을 적용한 상태로 출력한다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<div data-bind="html:vo.outHtml"></div>
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.outHtml = ctrl.observer('&lt;span&gt;html 마크업 적용&lt;/span&gt;');
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/03.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/03.js'"></pre>
     </div>
   </div>
 
   <!-- VALUE 입/출력 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">VALUE 입/출력<b class="badge text-primary">value</b></div>
-    입력 컨트롤 input, textarea에 입/출력되는 값 또는 select의 선택값 사용한다.
+    <p>입력 컨트롤 input, textarea에 입/출력되는 값 또는 select의 선택값에 사용한다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<input type="text" data-bind="value:vo.inputValue">
-<textarea data-bind="value:vo.inputValue"></textarea>
-<select data-bind="value:vo.option">
-  <option>선택</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-</select>
-
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.inputValue = ctrl.observer('출력');
-ctrl.vo.option = ctrl.observer('1');
-
-// 화면으로 부터 입력된 값
-var inputValue = ctrl.vo.inputValue();
-alert(inputValue);
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/04.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/04.js'"></pre>
     </div>
   </div>
 
   <!-- 체크 상태 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">체크 상태<b class="badge text-primary">checked</b></div>
-    체크박스, 라디오 버튼의 체크된 값에 사용된다. 선택된 상태가 다수 존재하는 체크박스의 경우 배열을 사용한다.
+    <p>라디오 버튼 또는 체크박스의 체크된 값에 사용된다.
+    라디오버튼의 경우 선택된 값이 입/출력된다. 체크박스를 한개만 사용하는 경우에는 boolean값을 사용하며,
+    다건의 체크박스인 경우 배열의 값으로 처리 된다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<input type="checkbox" value="1" data-bind="checked:vo.multi">
-<input type="checkbox" value="2" data-bind="checked:vo.multi">
-
-<input type="radio" value="1" data-bind="checked:vo.single">
-<input type="radio" value="1" data-bind="checked:vo.single">
-
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.multi = ctrl.observer(['1', '2']);
-ctrl.vo.single = ctrl.observer('1');
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/05.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/05.js'"></pre>
     </div>
   </div>
 
   <!-- 속성값 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">속성값<b class="badge text-primary">attr</b></div>
-    엘리먼트의 속성값을 변경할때 사용한다. 화면상에 해당 속성값을 변경시 JSON타입으로 기입한다.
+    <p>엘리먼트의 속성값을 변경할때 사용한다. 화면상에 해당 속성값을 변경시 JSON타입으로 기입한다.
     연결되는 변수값을 JSON객체로 사용하여 여러건의 속성을 추가 가능하다.
-    객체의 프로토타입에 대한 값을 observer를 사용하지 않은 경우 변경되지 않는 값으로 1번만 출력된다.
+    객체의 프로토타입에 대한 값을 observer를 사용하지 않은 경우 변경되지 않는 값으로
+    화면 랜더링시 초기화를 위해 적용되면 이후 값이 변경되지 않는다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<!-- id="id_sample" 속성 추가 -->
-<div data-bind="attr:{id:vo.id}"></div>
-
-<!-- title="image" href="/image.jpg" 속성 추가 -->
-<img data-bind="attr:vo.imgAttr">
-
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.id = ctrl.observer('id_sample');
-// JSON객체 사용
-ctrl.vo.imgAttr = {
-  title: ctrl.observer('image'),
-  href: ctrl.observer('/image.jpg')
-};
-// 화면의 속성값을 vo.toggle을 통해 변경할 수 없음
-ctrl.vo.toggle = {
-  title: 'image',
-  href: '/image.jpg'
-};
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/06.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/06.js'"></pre>
     </div>
   </div>
 
   <!-- 클래스 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">클래스<b class="badge text-primary">css</b></div>
-    엘리먼트의 클래스를 추가 또는 삭제 한다. boolean값으로 클래스의 추가 삭제가 가능하며,
-    JSON객체를 사용하여 여러건을 추가 삭제 가능하다.
+    <p>엘리먼트의 클래스를 추가 또는 삭제 한다. boolean값으로 클래스의 추가 삭제가 가능하며,
+    JSON객체를 사용하여 여러건을 추가 삭제 가능하다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<!-- class="open" -->
-<div data-bind="css:{open:vo.isOpen}"></div>
-
-<!-- class="open" 또는 class="close" -->
-<div data-bind="css:vo.toggle"></div>
-
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.isOpen = ctrl.observer(true);
-// JSON객체 사용
-ctrl.vo.toggle = {
-  open: ctrl.observer(false),
-  close: ctrl.observer(true)
-};
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/07.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/07.js'"></pre>
     </div>
   </div>
 
   <!-- 스타일 -->
   <div class="col-12 mt-3">
     <div class="font-weight-bold">스타일<b class="badge text-primary">style</b></div>
-    엘리먼트의 스타일을 변경할때 사용한다. JSON객체를 사용하여 여러건 변경이 가능하다.
+    <p>엘리먼트의 스타일을 변경할때 사용한다. JSON객체를 사용하여 여러건 변경이 가능하다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<!-- style="display:none" -->
-<div data-bind="style:{display:vo.display}"></div>
-
-<!-- style="display:block; color:#f00" -->
-<div data-bind="style:vo.style"></div>
-
-</pre>
-<pre data-bind="jscode">
-ctrl.vo.display = ctrl.observer('none');
-// JSON객체 사용
-ctrl.vo.style = {
-  display: ctrl.observer('block'),
-  color: ctrl.observer('#f00')
-};
-</pre>
+      <pre data-bind="example:'/doc/bind/vo/08.html'"></pre>
+      <pre data-bind="example:'/doc/bind/vo/08.js'"></pre>
     </div>
   </div>
-
-  <!-- 숨김처리 -->
 </div>

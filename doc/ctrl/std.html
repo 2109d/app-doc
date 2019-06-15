@@ -1,129 +1,74 @@
 <div class="row" data-app-motion>
-  <div class="col-12"><h2 class="h4">컨트롤러 기본기능</h2></div>
-
   <div class="col-12">
-    컨트롤러는 각각 뷰(<b class="badge">view</b>), 팝업(<b class="badge">popup</b>),
+    <h2 class="h4">컨트롤러 기본기능</h2>
+    <p>컨트롤러는 각각 뷰(<b class="badge">view</b>), 팝업(<b class="badge">popup</b>),
     콤포넌트(<b class="badge">component</b>) 3종류가 존재 하며,
-    app를 통해 컨트롤러를 등록 후 사용한다. 등록된 컨트롤러는 싱글톤(singleton)으로
-    중복 사용할 수 없다. 컨트롤러의 사용은 app의 <b class="badge">get</b>메소드를 통해 전달 받을 수 있다.
+    app를 통해 컨트롤러를 등록 후 사용한다. 컨트롤러는 싱글톤(singleton)으로
+    app의 <b class="badge">ctrl</b>속성값에 등록되어 있다.
+    첫번째 매개변수는 컨트롤러 이름, 두번째 매개변수는 컨트롤러 구현부 프로시저,
+    세번째는 컨트롤러 메소드 확장시 사용한다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="jscode">
-// 뷰 컨트롤러 등록
-app.view('viewName', function(ctrl) {
-  // 팝업 컨트롤러 취득
-  var popupName = app.get('popupName');
-});
-
-// 팝업 컨트롤러 등록
-app.popup('popupName', function(ctrl) {});
-</pre>
+      <pre data-bind="example:'/doc/ctrl/std/01.js'"></pre>
     </div>
   </div>
 
   <!-- 뷰 -->
   <div class="col-12 mt-3">
-    <div class="font-weight-bold">뷰<b class="badge text-primary">view( name:string, prodecure:function )</b></div>
-    이미 랜더링된 영역을 컨트롤 할때 사용한다.
+    <strong>뷰<b class="badge text-primary">view(name:string, prodecure:function, extend:function)</b></strong>
+    <p>랜더링이 완료된 영역을 컨트롤 할때 사용한다.
     화면의 <b class="badge">data-app-view="ctrl-name"</b>(스네이크 표기법 사용) 속성에 반응하며,
-    app의 <b class="badge">view('ctrlName', function)</b>(카멜 표기법 사용)으로 등록한다.
+    app의 <b class="badge">view('ctrlName', function)</b>(카멜 표기법 사용)으로 등록한다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<div data-app-view="view-name"></div>
-</pre>
-<pre data-bind="jscode">
-app.view('viewName', function(ctrl, param) {});
-</pre>
+      <pre data-bind="example:'/doc/ctrl/std/02.html'"></pre>
+      <pre data-bind="example:'/doc/ctrl/std/02.js'"></pre>
     </div>
   </div>
 
   <!-- 팝업 -->
   <div class="col-12 mt-3">
-    <div class="font-weight-bold">팝업<b class="badge text-primary">popup( name:string, prodecure:function )</b></div>
-    별도의 공간에 레이어 생성 후 랜더링된 영역을 컨트롤 할때 사용한다.
-    레이아웃 생성시 <b class="badge">data-app-popup="ctrl-name"</b>(스네이크 표기법 사용) 속성으로 생성되며,
+    <strong>팝업<b class="badge text-primary">popup( name:string, prodecure:function, extend:function )</b></strong>
+    <p>레이어 생성, 추가된 영역을 컨트롤 할때 사용한다. 레이아웃 생성시
+    <b class="badge">data-app-popup="ctrl-name"</b>(스네이크 표기법 사용) 속성으로 생성되며,
     app의 <b class="badge">popup('ctrlName', function)</b>(카멜 표기법 사용)으로 등록한다.
+    팝업의 경우 <b class="badge">data-app-resource</b> 영역안에 생성되게 된다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<div data-app-resource>
-  <div data-app-popup="popup-name"></div>
-</div>
-</pre>
-<pre data-bind="jscode">
-app.popup('popupName', function(ctrl, param) {});
-</pre>
+      <pre data-bind="example:'/doc/ctrl/std/03.html'"></pre>
+      <pre data-bind="example:'/doc/ctrl/std/03.js'"></pre>
     </div>
   </div>
 
   <!-- 콤포넌트 -->
   <div class="col-12 mt-3">
-    <div class="font-weight-bold">콤포넌트<b class="badge text-primary">component( name:string, prodecure:function )</b></div>
-    view또는 popup 컨트롤러 안에서 동작하는 영역을 컨트롤 할때 사용한다.
+    <strong>콤포넌트<b class="badge text-primary">component( name:string, prodecure:function, extend:function )</b></strong>
+    <p>view또는 popup 컨트롤러 안에서 동작하는 영역을 컨트롤 할때 사용한다.
     화면상의 콤포넌트 영역은 주석을 이용하여 콤포넌트의 영역을 지정 하며,
-    시작<b class="badge">&lt;!-- ko component:'ctrl-name' --&gt;</b>(스네이크 표기법 사용)
-    종료<b class="badge">&lt;!-- /ko --&gt;</b> 사이에 랜더링 된다.
-    app의 <b class="badge">component('ctrlName', function)</b>(카멜 표기법 사용)으로 등록한다.
+    <b class="badge text-success">&lt;!-- ko component:'ctrl-name' --&gt;</b>(스네이크 표기법 사용)
+    <b class="badge text-success">&lt;!-- /ko --&gt;</b> 사이에 랜더링 된다.
+    app의 <b class="badge">component('ctrlName', function)</b>(카멜 표기법 사용)으로 등록한다.</p>
     <div class="alert alert-secondary mt-3">
-<pre data-bind="htmlcode">
-<div data-app-view="view-name">
-  <!-- ko component:'comp-name' -->
-  콤포넌트의 랜더링 영역
-  <!-- /ko -->
-</div>
-</pre>
-<pre data-bind="jscode">
-app.component('compName', function(ctrl, param) {});
-</pre>
+        <pre data-bind="example:'/doc/ctrl/std/04.html'"></pre>
+        <pre data-bind="example:'/doc/ctrl/std/04.js'"></pre>
     </div>
   </div>
 
-  <div class="col-12 mt-5"><h2 class="h4">오픈과 종료</h2></div>
-  <!-- 오픈 -->
+  <div class="col-12 mt-5"><h2 class="h4">시작과 종료</h2></div>
+  <!-- 시작 -->
   <div class="col-12 mt-3">
-    <div class="font-weight-bold">오픈<b class="badge text-primary">open(ctrl:Controller, [param:object]) :promise</b></div>
-    app로 부터 컨트롤러를 얻어와서 사용한다. 첫번째 매개변수에 오픈하려는 컨트롤러 객체를 넘겨 주며,
-    두번째 매개변수값에 파라메터값을 전달 할수 있다.
-    open메소드는 Promise를 반환하며, 오픈한 컨트롤러가 종료시 이벤트를 받을 수 있다.
+    <strong>시작<b class="badge text-primary">open(name:string, [param:object]) :promise</b></strong>
+    <p>등록된 컨트롤러를 수행하며, 화면상에 지정된 템플릿으로 랜더링한다.
+    첫번째 매개변수는 오픈하려는 컨트롤러명 이며, 두번째 매개변수값에 전달 하고자 하는 파라메터값 이다.
+    open메소드는 프로미스를 반환하며, 오픈한 컨트롤러가 종료시 이벤트를 전달 받는다.</p>
   </div>
   <!-- 종료 -->
   <div class="col-12 mt-3">
-    <div class="font-weight-bold">종료<b class="badge text-primary">close(result:object, [motion:promise])</b></div>
-    오픈한 컨트롤러를 종료할때 사용하며, 첫번째 매개변수에 결과물을 결과물을 전달할 수 있다.
-    두번째 매개변수값은 애니메이션(<b class="badge">data-app-motion</b>)을 사용할 경우 애니매에션의 종료 시점을 알려 준다.
+    <strong>종료<b class="badge text-primary">close(result:object)</b></strong>
+    <p>오픈된 컨트롤러를 종료할때 사용하며, 매개변수에 결과물을 전달할 수 있다.
+    전달하고자 하는 매개변수값은 해당 컨트롤러를 오픈한 주체가되는 컨트롤러의 open함수의 프로미스에 전달된다.
+    </p>
   </div>
   <div class="col-12 mt-3">
     <div class="alert alert-secondary mt-3">
-<pre data-bind="jscode">
-// 뷰 컨트롤러
-app.view('viName', function(ctrl) {
-  // 팝업컨트롤러 취득
-  var popName = app.get('popName');
-
-  ctrl.on.openPopup = ctrl.handler()
-  .event('click', function(evt) {
-    var param = {type: 'view'};
-    // 팝업컨트롤러 오픈
-    popName.open(ctrl, param).then(function(result) {
-      // 팝업종료시 전달된 결과물
-      ctrl.log('popName close:', result);
-    });
-  });
-});
-
-// 팝업 컨트롤러
-app.popup('popName', function(ctrl, param) {
-  // 팝업 로드 완료
-  ctrl.onload(function() {
-    ctrl.log('popName onload:', param);
-  });
-
-  ctrl.on.close = ctrl.handler()
-  .event('click', function(evt) {
-    var result = {type: 'view'};
-    // 팝업을 종료 하며, 결과물을 오픈한 대상에 넘겨 준다.
-    ctrl.close(result);
-  });
-});
-</pre>
+      <pre data-bind="example:'/doc/ctrl/std/05.js'"></pre>
     </div>
   </div>
 

@@ -6,7 +6,7 @@
         <div class="row">
           <label class="col-12" for="s1-id">아이디</label>
           <div class="col-12 mb-3">
-            <input data-bind="value:vo.id, movepoint" data-movepoint="id" class="form-control" type="text" id="s1-id" placeholder="아이디를 입력하세요.">
+            <input data-bind="value:vo.id, movepoint:'id'" class="form-control" type="text" id="s1-id" placeholder="아이디를 입력하세요.">
           </div>
           <div class="col-6 offset-6">
               <button data-bind="event:on.search" class="btn btn-block btn-outline-primary">조회</button>
@@ -38,7 +38,7 @@
   <div class="card-footer">
     <div class="row">
       <div class="col-8 offset-4 col-md-6 offset-md-6">
-        <button data-bind="event:on.next, waypoint" class="btn btn-block btn-primary">다음</button>
+        <button data-bind="event:on.next, movepoint:'next', waypoint" class="btn btn-block btn-primary">다음</button>
       </div>
     </div>
   </div>

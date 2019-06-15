@@ -1,7 +1,7 @@
 !function(app) {
 app.popup('popStep3', function(ctrl, param) {
   // - properties -
-  ctrl.css = {view:true};
+  ctrl.css({view:true});
   ctrl.url = app.path('/demo/popup/pop-step3.html');
 
   // - value -
@@ -11,9 +11,11 @@ app.popup('popStep3', function(ctrl, param) {
   // - event -
   var on = ctrl.on;
   on.complite = ctrl.handler().event('click', function() {
-    ctrl.get.endstep();
+    ctrl.finished();
   });
-}).set('endstep', function() {
-  location.href = app.path('/demo-popup.html');
+}, function(ex) {
+  ex.finished = function(ctrl) {
+    location.href = app.path('/demo-popup.html');
+  };
 });
 }(MakeApp());

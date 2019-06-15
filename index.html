@@ -7,7 +7,7 @@ title: "intro"
 
 <script>!function(app) {
   app.view('docMain', function(ctrl) {
-    var path = app.param.path || 'info-index';
+    var path = app.param('path') || 'info-index';
     ctrl.url = app.path('/doc/' + path.replace(/-/g, '/'))+'.html';
   });
 }(MakeApp('docMain'));</script>

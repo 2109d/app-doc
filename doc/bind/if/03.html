@@ -1,0 +1,9 @@
+<div data-bind="foreach:{as:'list', data:vo.list}">
+  <span>셀렉트</span> 생성
+  <select>
+    <option>전체</option>
+    <!-- ko foreach:$data.select -->
+    <option data-bind="text:list.text +':'+ $data.text, attr:{value:$data.value}">셀렉트: 옵션값</option>
+    <!-- /ko -->
+  </select>
+</div>
